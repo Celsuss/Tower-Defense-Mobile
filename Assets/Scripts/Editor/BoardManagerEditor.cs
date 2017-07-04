@@ -37,20 +37,32 @@ public class BoardManagerEditor : Editor {
 
 	void DrawGenerateBoardButton(){
 		if(GUILayout.Button("Generate Board")){
+
+			if(m_Target.transform.childCount > 0){
+				EditorApplication.Beep();
+				if( EditorUtility.DisplayDialog( "Really?", "Do you really want generate a new board?", "Yes", "No" ) == true ){
+					ClearBoard();
+					EditorUtility.SetDirty( m_Target );
+				}
+				else
+					return;
+			}
+			
 			GenerateBoard();	
 		}
 	}
 
 	void DrawClearBoardButton(){
 		if(GUILayout.Button("Clear Board")){
-			ClearBoard();
+			EditorApplication.Beep();
+			if( EditorUtility.DisplayDialog( "Really?", "Do you really want to clear the board?", "Yes", "No" ) == true ){
+				ClearBoard();
+				EditorUtility.SetDirty( m_Target );
+			}
 		}
 	}
 
 	void GenerateBoard(){
-		if(m_Target.transform.childCount > 0)
-			ClearBoard();
-
 		int width = m_Target.m_Width;
 		int height = m_Target.m_Height;
 		Vector3 pos = new Vector3(-(width/2), -(height/2), 0);
