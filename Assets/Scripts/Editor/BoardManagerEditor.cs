@@ -48,7 +48,7 @@ public class BoardManagerEditor : Editor {
 					return;
 			}
 			
-			GenerateBoard();	
+			GenerateBoard();
 		}
 	}
 

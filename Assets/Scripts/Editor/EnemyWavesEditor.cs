@@ -8,6 +8,7 @@ using System.Reflection;
 public class EnemyWavesEditor : Editor {
 
 	EnemyWaves m_Target;
+	List<bool> m_ShowWave = new List<bool>();
 
 	public override void OnInspectorGUI(){
 		m_Target = (EnemyWaves)target;
@@ -27,37 +28,44 @@ public class EnemyWavesEditor : Editor {
 
 	void DrawWaves( int index ){
         if( index < 0 || index >= m_Target.Waves.Count ) return;
+		
+		while(m_ShowWave.Count < m_Target.Waves.Count)
+			m_ShowWave.Add(false);
 
-        SerializedProperty listIterator = serializedObject.FindProperty( "Waves" );
-		WaveData wave = m_Target.Waves[index];
+		m_ShowWave[ index ] = EditorGUILayout.Foldout(m_ShowWave[ index ], "Waves");
+		if(m_ShowWave[ index ]){
 
-		GUILayout.Label("Level " + index, EditorStyles.label, GUILayout.Width( 90 ));
+			SerializedProperty listIterator = serializedObject.FindProperty( "Level " + index );
+			WaveData wave = m_Target.Waves[index];
 
-        GUILayout.BeginHorizontal();{   
-            GUILayout.Label( "Health Modifier", EditorStyles.label, GUILayout.Width( 90 ) );
+			//GUILayout.Label("Level " + index, EditorStyles.label, GUILayout.Width( 90 ));
 
-            EditorGUI.BeginChangeCheck();
+			GUILayout.BeginHorizontal();{   
+				GUILayout.Label( "Health Modifier", EditorStyles.label, GUILayout.Width( 90 ) );
 
-			float newHealthModifier = EditorGUILayout.FloatField(wave.HealthModifier, GUILayout.Width(30));
+				EditorGUI.BeginChangeCheck();
 
-            //If a variable was modified, EndChangeCheck() returns true
-            if( EditorGUI.EndChangeCheck() ){
-				m_Target.Waves[index].HealthModifier = newHealthModifier;
+				float newHealthModifier = EditorGUILayout.FloatField(wave.HealthModifier, GUILayout.Width(30));
 
-                EditorUtility.SetDirty( m_Target );
-            }
+				//If a variable was modified, EndChangeCheck() returns true
+				if( EditorGUI.EndChangeCheck() ){
+					m_Target.Waves[index].HealthModifier = newHealthModifier;
 
-            DrawRemoveWaveButton( index );
-        }
-        GUILayout.EndHorizontal();
+					EditorUtility.SetDirty( m_Target );
+				}
 
-		GUILayout.Space(5);
+				DrawRemoveWaveButton( index );
+			}
+			GUILayout.EndHorizontal();
 
-		for(int i = 0; i < wave.Enemies.Count; ++i)
-			DrawEnemies( i, index );
-		DrawAddEnemyButton( index );
+			GUILayout.Space(5);
 
-		GUILayout.Space(20);
+			for(int i = 0; i < wave.Enemies.Count; ++i)
+				DrawEnemies( i, index );
+			DrawAddEnemyButton( index );
+
+			GUILayout.Space(20);
+		}
     }
 
 	void DrawEnemies( int index, int waveIndex ){
@@ -66,6 +74,8 @@ public class EnemyWavesEditor : Editor {
 
 		WaveData wave = m_Target.Waves[waveIndex];
 		EnemyWaveData enemy = wave.Enemies[ index ];
+
+
 
 		GUILayout.Label("Enemie " + index, EditorStyles.label, GUILayout.Width( 90 ) );
 		GUILayout.BeginHorizontal();{   
@@ -89,6 +99,7 @@ public class EnemyWavesEditor : Editor {
     void DrawAddWaveButton(){
         if( GUILayout.Button( "Add new Wave", GUILayout.Height( 30 ) ) ){
             m_Target.Waves.Add( new WaveData { HealthModifier = 1f } );
+			m_ShowWave.Add(true);
 			EditorUtility.SetDirty( m_Target );
         }
     }
@@ -106,6 +117,7 @@ public class EnemyWavesEditor : Editor {
                 if( EditorUtility.DisplayDialog( "Really?", "Do you really want to remove the Wave '" + index + "'?", "Yes", "No" ) == true ){
                     Undo.RecordObject( m_Target, "Delete Wave" );
                     m_Target.Waves.RemoveAt( index );
+					m_ShowWave.RemoveAt( index );
                     EditorUtility.SetDirty( m_Target );
                 }
             }
