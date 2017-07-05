@@ -5,7 +5,7 @@ using UnityEditor;
 
 [InitializeOnLoad]
 public class LevelEditorEditTiles : Editor {
-
+    
 	static Vector2 m_ScrollPosition = Vector2.zero;
 	static Transform m_BoardManager;
     public static Transform BoardManager{
@@ -53,7 +53,7 @@ public class LevelEditorEditTiles : Editor {
 	}
 
 	static void DrawCustomBlockButtons( SceneView sceneView ){
-		if(LevelEditorToolsMenu.SelectedTool != 1) return;
+		if(LevelEditorToolsMenu.SelectedTool != LevelEditorToolsMenu.SelectableTools.Paint) return;
 
         Handles.BeginGUI();
 
@@ -72,7 +72,7 @@ public class LevelEditorEditTiles : Editor {
 	static void DrawCustomTileButton( int index, Rect sceneViewRect ){
         bool isActive = false;
 
-        if( LevelEditorToolsMenu.SelectedTool == 1 && index == SelectedTile ){
+        if( LevelEditorToolsMenu.SelectedTool == LevelEditorToolsMenu.SelectableTools.Paint && index == SelectedTile ){
             isActive = true;
         }
 
@@ -86,12 +86,12 @@ public class LevelEditorEditTiles : Editor {
         //If this button is clicked but it wasn't clicked before (ie. if the user has just pressed the button)
         if( isToggleDown && !isActive ){
             SelectedTile = index;
-            LevelEditorToolsMenu.SelectedTool = 1;
+            LevelEditorToolsMenu.SelectedTool = LevelEditorToolsMenu.SelectableTools.Paint;
         }
     }
 
 	static void HandleLevelEditorPlacement(){
-		if(LevelEditorToolsMenu.SelectedTool == 0) return;
+		if(LevelEditorToolsMenu.SelectedTool == LevelEditorToolsMenu.SelectableTools.None) return;
 
 		int controlId = GUIUtility.GetControlID( FocusType.Passive );
 
@@ -101,12 +101,8 @@ public class LevelEditorEditTiles : Editor {
             Event.current.shift == false &&
             Event.current.control == false ){
             if( TileHandle.IsMouseInValidArea == true ){
-                if( LevelEditorToolsMenu.SelectedTool == 1 ){
+                if( LevelEditorToolsMenu.SelectedTool == LevelEditorToolsMenu.SelectableTools.Paint ){
                     AddBlock( TileHandle.CurrentHandlePosition, m_LevelTiles.Tiles[ SelectedTile ].Prefab );
-                }
-
-                if( LevelEditorToolsMenu.SelectedTool == 2 ){
-                    
                 }
             }
         }
@@ -134,17 +130,10 @@ public class LevelEditorEditTiles : Editor {
         UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
     }
 
-    //Remove a gameobject that is close to the given position
-    public static void RemoveBlock( Vector3 position ){
-        
-    }
-
 	static GameObject GetTile(Vector3 position){
 		for( int i = 0; i < BoardManager.childCount; ++i ){
             float distanceToBlock = Vector3.Distance(BoardManager.GetChild(i).transform.position, position );
             if( distanceToBlock < 0.1f ){
-                //Use Undo.DestroyObjectImmediate to destroy the object and create a proper Undo/Redo step for it
-                //Undo.DestroyObjectImmediate( BoardManager.GetChild( i ).gameObject );
                 return BoardManager.GetChild(i).gameObject;
             }
         }

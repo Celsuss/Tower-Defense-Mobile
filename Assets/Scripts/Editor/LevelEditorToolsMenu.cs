@@ -6,16 +6,22 @@ using UnityEditor;
 [InitializeOnLoad]
 public class LevelEditorToolsMenu : Editor {
 
-	public static int SelectedTool{
+    public enum SelectableTools{
+        None,
+        Paint,
+        Waypoints
+    }
+
+	public static SelectableTools SelectedTool{
         get{
-            return EditorPrefs.GetInt( "SelectedEditorTool", 0 );
+            return (SelectableTools)EditorPrefs.GetInt( "SelectedEditorTool", 0 );
         }
         set{
             if( value == SelectedTool ) return;
 
-            EditorPrefs.SetInt( "SelectedEditorTool", value );
+            EditorPrefs.SetInt( "SelectedEditorTool", (int)value );
 
-            switch( value ){
+            switch( (int)value ){
             case 0:
                 EditorPrefs.SetBool( "IsLevelEditorEnabled", false );
 
@@ -44,7 +50,7 @@ public class LevelEditorToolsMenu : Editor {
     }
 
 	static LevelEditorToolsMenu(){
-		 SceneView.onSceneGUIDelegate -= OnSceneGUI;
+    	SceneView.onSceneGUIDelegate -= OnSceneGUI;
         SceneView.onSceneGUIDelegate += OnSceneGUI;
 
         //EditorApplication.hierarchyWindowChanged is a good way to tell if the user has loaded a new scene in the editor
@@ -62,20 +68,19 @@ public class LevelEditorToolsMenu : Editor {
         DrawToolsMenu( sceneView.position );
     }
 
-	static void DrawToolsMenu( Rect position )
-    {
-        //By using Handles.BeginGUI() we can start drawing regular GUI elements into the SceneView
+	static void DrawToolsMenu( Rect position )   {
         Handles.BeginGUI();
 
         //Here we draw a toolbar at the bottom edge of the SceneView
         GUILayout.BeginArea( new Rect( 0, position.height - 35, position.width, 20 ), EditorStyles.toolbar );
         {
-            string[] buttonLabels = new string[] { "None", "Paint" };
+            string[] buttonLabels = new string[] { "None", "Paint", "Waypoints" };
 
-            SelectedTool = GUILayout.SelectionGrid(
-                SelectedTool, 
+            int selectedToolInt = (int)SelectedTool;
+            SelectedTool = (SelectableTools)GUILayout.SelectionGrid(
+                selectedToolInt,
                 buttonLabels, 
-                3,
+                4,
                 EditorStyles.toolbarButton,
                 GUILayout.Width( 300 ) );
         }
