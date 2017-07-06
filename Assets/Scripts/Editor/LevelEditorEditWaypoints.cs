@@ -75,19 +75,6 @@ public class LevelEditorEditWaypoints : Editor {
 				Handles.DrawDottedLine(p1, p2, 1);
 			}
 		}
-
-		/*Waypoint wp = WaypointsManager.NextWaypoint;
-		if(!wp)
-			return;
-
-		Vector3 p1 = WaypointsManager.transform.position;
-		Vector3 p2 = wp.transform.position;
-		while(wp.NextWaypoint){
-			p1 = wp.transform.position;
-			p2 = wp.NextWaypoint.transform.position;
-			//Handles.DrawDottedLine(p1, p2, 1);
-			wp = wp.NextWaypoint;
-		}*/
     }
 
 	static void DrawDragPath( SceneView sceneView ){
@@ -147,20 +134,17 @@ public class LevelEditorEditWaypoints : Editor {
 		if(!tile) return;
 
 		Transform oldWaypointTransform = tile.transform.Find("Waypoint");
-		if(oldWaypointTransform){
-			Waypoint oldWaypointComp = oldWaypointTransform.GetComponent<Waypoint>();
-			if(oldWaypointComp){
-				return;
-			}
-			else
-				Debug.LogError("Cant find previous Waypoint component");
-		}
+		if (oldWaypointTransform ) return;
 
 		GameObject newWaypointObj = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
 		newWaypointObj.transform.parent = tile.transform;
 		newWaypointObj.transform.position = tile.transform.position;
 		Waypoint newWaypoint = newWaypointObj.GetComponent<Waypoint>();
-		WaypointsManager.Waypoints.Add(newWaypoint);
+		WaypointsManager.Waypoints.Add( newWaypoint );
+
+		EnemySpawner spawner = tile.GetComponentInChildren<EnemySpawner>();
+		if(spawner)
+			spawner.FirstWaypoint = newWaypoint;
 
         UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
     }
@@ -194,6 +178,7 @@ public class LevelEditorEditWaypoints : Editor {
 		if( !wp ) return;
 
 		m_DragingWaypoint.NextWaypoint = wp;
+		UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
 	}
 
 	static GameObject GetTile( Vector3 position ){

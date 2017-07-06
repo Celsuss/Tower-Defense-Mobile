@@ -6,6 +6,17 @@ public class EnemySpawner : MonoBehaviour {
 
 	[SerializeField] EnemyWaves m_EnemyWaves;
 	List<GameObject> m_CurrentWave;
+	[SerializeField] Waypoint m_FirstWaypoint;
+
+	public Waypoint FirstWaypoint{
+		get{ return m_FirstWaypoint; }
+		set{ m_FirstWaypoint = value; }
+	}
+
+	void Awake(){
+		print("Setting EnemySpawner next waypoint");
+		m_FirstWaypoint = transform.parent.GetComponentInChildren<Waypoint>();
+	}
 
 	// Use this for initialization
 	void Start () {
