@@ -80,7 +80,10 @@ public class LevelEditorEditTiles : Editor {
         Texture2D previewImage = AssetPreview.GetAssetPreview( m_LevelTiles.Tiles[ index ].Prefab );
         GUIContent buttonContent = new GUIContent( previewImage );
 
-        GUI.Label( new Rect( 5, index * 128 + 5, 100, 20 ), m_LevelTiles.Tiles[ index ].Name );
+        GUIStyle style = new GUIStyle();
+        style.normal.textColor = Color.black;
+        //style.fontStyle = FontStyle.Bold;
+        GUI.Label( new Rect( 5, index * 128 + 5, 100, 20 ), m_LevelTiles.Tiles[ index ].Name, style );
         bool isToggleDown = GUI.Toggle( new Rect( 5, index * 128 + 25, 100, 100 ), isActive, buttonContent, GUI.skin.button );
 
         //If this button is clicked but it wasn't clicked before (ie. if the user has just pressed the button)
