@@ -13,11 +13,6 @@ public class EnemySpawner : MonoBehaviour {
 		set{ m_FirstWaypoint = value; }
 	}
 
-	void Awake(){
-		print("Setting EnemySpawner next waypoint");
-		m_FirstWaypoint = transform.parent.GetComponentInChildren<Waypoint>();
-	}
-
 	// Use this for initialization
 	void Start () {
 		SpawnEnemies(0);

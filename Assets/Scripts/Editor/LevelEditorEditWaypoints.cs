@@ -68,6 +68,8 @@ public class LevelEditorEditWaypoints : Editor {
 	static void DrawPath(){
 		Handles.color = Color.yellow;
 
+		if(!WaypointsManager) return;
+
 		foreach(Waypoint wp in WaypointsManager.Waypoints){
 			if(wp.NextWaypoint){
 				Vector3 p1 = wp.transform.position;
@@ -143,9 +145,12 @@ public class LevelEditorEditWaypoints : Editor {
 		WaypointsManager.Waypoints.Add( newWaypoint );
 
 		EnemySpawner spawner = tile.GetComponentInChildren<EnemySpawner>();
-		if(spawner)
+		if(spawner){
 			spawner.FirstWaypoint = newWaypoint;
+			EditorUtility.SetDirty(spawner);
+		}
 
+		EditorUtility.SetDirty(WaypointsManager);
         UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
     }
 
@@ -178,6 +183,7 @@ public class LevelEditorEditWaypoints : Editor {
 		if( !wp ) return;
 
 		m_DragingWaypoint.NextWaypoint = wp;
+		EditorUtility.SetDirty(m_DragingWaypoint);
 		UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
 	}
 

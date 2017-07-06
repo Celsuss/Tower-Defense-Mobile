@@ -35,10 +35,8 @@ public class EnemyWavesEditor : Editor {
 		m_ShowWave[ index ] = EditorGUILayout.Foldout(m_ShowWave[ index ], "Waves");
 		if(m_ShowWave[ index ]){
 
-			SerializedProperty listIterator = serializedObject.FindProperty( "Level " + index );
+			//SerializedProperty listIterator = serializedObject.FindProperty( "Level " + index );
 			WaveData wave = m_Target.Waves[index];
-
-			//GUILayout.Label("Level " + index, EditorStyles.label, GUILayout.Width( 90 ));
 
 			GUILayout.BeginHorizontal();{   
 				GUILayout.Label( "Health Modifier", EditorStyles.label, GUILayout.Width( 90 ) );

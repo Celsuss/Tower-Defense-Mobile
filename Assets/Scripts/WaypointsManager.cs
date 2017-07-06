@@ -5,7 +5,7 @@ using UnityEngine;
 public class WaypointsManager : MonoBehaviour {
 
 	[SerializeField] GameObject m_WapointPrefab;
-	List<Waypoint> m_Waypoints;
+	[SerializeField] List<Waypoint> m_Waypoints;
 	Waypoint m_NextWaypoint;
 
 	public GameObject WaypointPrefab{
