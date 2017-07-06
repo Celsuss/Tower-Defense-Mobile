@@ -31,7 +31,7 @@ public class TileHandle : Editor {
 		if( Event.current == null ) return;
 
         Vector2 mousePosition = new Vector2( Event.current.mousePosition.x, Event.current.mousePosition.y );
-
+		
         Ray ray = HandleUtility.GUIPointToWorldRay( mousePosition );
         RaycastHit hit;
         if( Physics.Raycast( ray, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer( "Level" ) ))

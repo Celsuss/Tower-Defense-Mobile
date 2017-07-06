@@ -5,14 +5,14 @@ using UnityEngine;
 public class WaypointsManager : MonoBehaviour {
 
 	[SerializeField] GameObject m_WapointPrefab;
-	List<GameObject> m_Waypoints;
+	List<Waypoint> m_Waypoints;
 	Waypoint m_NextWaypoint;
 
 	public GameObject WaypointPrefab{
 		get{ return m_WapointPrefab; }
 	}
 
-	public List<GameObject> Waypoints{
+	public List<Waypoint> Waypoints{
 		get{ return m_Waypoints; }
 	}
 
