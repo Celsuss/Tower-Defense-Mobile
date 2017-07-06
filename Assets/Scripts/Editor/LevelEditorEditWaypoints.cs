@@ -189,7 +189,7 @@ public class LevelEditorEditWaypoints : Editor {
 
 	static GameObject GetTile( Vector3 position ){
 		for( int i = 0; i < BoardManager.childCount; ++i ){
-            float distanceToBlock = Vector3.Distance(BoardManager.GetChild(i).transform.position, position );
+            float distanceToBlock = Vector3.Distance( BoardManager.GetChild(i).transform.position, position );
             if( distanceToBlock < 0.1f ){
                 return BoardManager.GetChild(i).gameObject;
             }

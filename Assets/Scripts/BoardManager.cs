@@ -17,4 +17,23 @@ public class BoardManager : MonoBehaviour {
 	void Update () {
 		
 	}
+
+	public GameObject GetTile( Vector3 position ){
+		for( int i = 0; i < transform.childCount; ++i ){
+            float distanceToBlock = Vector3.Distance( transform.GetChild(i).transform.position, position );
+            if( distanceToBlock < 0.1f ){
+                return transform.GetChild(i).gameObject;
+            }
+        }
+		return null;
+	}
+
+	public GameObject GetTileClosestToMouse(){
+		GameObject obj = null;
+		Ray ray = Camera.main.ScreenPointToRay( Input.mousePosition );
+        RaycastHit hit;
+        if( Physics.Raycast( ray, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer( "Level" ) ))
+			obj = GetTile( hit.transform.position );
+		return obj;
+	}
 }
