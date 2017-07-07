@@ -26,6 +26,11 @@ public class ConstructBuildinig : MonoBehaviour {
 
 	void AddBuuilding(){
 		GameObject tile = m_BoardManager.GetTileClosestToMouse();
+		for(int i = 0; i < tile.transform.childCount; i++){
+			if( tile.transform.GetChild( i ).tag == "Building" )
+				return;
+		}
+
 		GameObject newTile = Instantiate( m_Prefab, tile.transform.position, tile.transform.rotation, tile.transform );
 	}
 }
