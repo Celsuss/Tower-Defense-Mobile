@@ -5,8 +5,10 @@ using UnityEngine.Assertions;
 
 public class ConstructBuildinig : MonoBehaviour {
 
-	[SerializeField] GameObject m_Prefab;
+	[SerializeField] SpriteRenderer m_TowerBlueprintSprite = null;
+	GameObject m_Tower;
 	BoardManager m_BoardManager;
+	bool m_PlacingBuilding = false;
 
 	// Use this for initialization
 	void Start () {
@@ -19,24 +21,52 @@ public class ConstructBuildinig : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetMouseButtonDown(0)){
-			AddBuuilding();
-		}
+		GameObject tile = m_BoardManager.GetTileClosestToMouse();
+
+		if( Input.GetMouseButtonDown( 0 ) && tile )
+			AddBuuilding( tile );
+		else if( Input.GetMouseButtonDown( 1 ) || Input.GetKeyDown( KeyCode.Escape ) )
+			StopPlacingBuilding();
+
+		ToggleTowerBlueprintEnabled( tile );
+		UpdateTowerBlueprintPosition( tile );
 	}
 
-	void AddBuuilding(){
-		GameObject tile = m_BoardManager.GetTileClosestToMouse();
-		if(!tile) return;
-
-		for(int i = 0; i < tile.transform.childCount; i++){
+	void AddBuuilding (GameObject tile ){
+		for( int i = 0; i < tile.transform.childCount; i++ ){
 			if( tile.transform.GetChild( i ).tag == "Building" )
 				return;
 		}
 
-		GameObject newTile = Instantiate( m_Prefab, tile.transform.position, tile.transform.rotation, tile.transform );
+		Assert.IsNotNull( m_Tower );
+		Assert.IsNotNull( tile );
+		GameObject newTile = Instantiate( m_Tower, tile.transform.position, tile.transform.rotation, tile.transform );
+
+		if( !Input.GetKey( KeyCode.LeftControl ) )
+			StopPlacingBuilding();
 	}
 
-	public void StartPlaceBuilding(GameObject tower){
-		m_Prefab = tower;
+	void UpdateTowerBlueprintPosition( GameObject tile ){
+		if( !tile ) return;
+		m_TowerBlueprintSprite.transform.position = tile.transform.position;
+	}
+
+	void ToggleTowerBlueprintEnabled( GameObject tile ){
+		if(!tile)
+			m_TowerBlueprintSprite.enabled = false;
+		else if(tile && !m_TowerBlueprintSprite.enabled)
+			m_TowerBlueprintSprite.enabled = true;
+	}
+
+	public void StartPlaceBuilding( GameObject tower ){
+		m_Tower = tower;
+		m_TowerBlueprintSprite.sprite = m_Tower.GetComponent<SpriteRenderer>().sprite;
+		m_PlacingBuilding = true;
+	}
+
+	void StopPlacingBuilding(){
+		m_Tower = null;
+		m_TowerBlueprintSprite.sprite = null;
+		m_PlacingBuilding = false;
 	}
 }
