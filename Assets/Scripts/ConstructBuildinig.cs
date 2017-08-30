@@ -23,7 +23,7 @@ public class ConstructBuildinig : MonoBehaviour {
 	void Update () {
 		GameObject tile = m_BoardManager.GetTileClosestToMouse();
 
-		if( Input.GetMouseButtonDown( 0 ) && tile )
+		if( Input.GetMouseButtonDown( 0 ) && m_PlacingBuilding && tile )
 			AddBuuilding( tile );
 		else if( Input.GetMouseButtonDown( 1 ) || Input.GetKeyDown( KeyCode.Escape ) )
 			StopPlacingBuilding();
