@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour {
 
 	[SerializeField] float m_Health;
+	[SerializeField] int m_GoldValue;
 
 	public float Health{
 		get{ return m_Health; }
@@ -23,6 +24,7 @@ public class EnemyHealth : MonoBehaviour {
 	}
 
 	void KillEnemy(){
+		GameManager.Instance.Gold += m_GoldValue;
 		Destroy( gameObject );
 	}
 }

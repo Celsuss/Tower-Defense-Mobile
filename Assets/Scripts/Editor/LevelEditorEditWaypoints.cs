@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEditor;
 
 [InitializeOnLoad]
@@ -68,10 +69,11 @@ public class LevelEditorEditWaypoints : Editor {
 	static void DrawPath(){
 		Handles.color = Color.yellow;
 
-		if(!WaypointsManager) return;
+		if( !WaypointsManager ) return;
+		if( WaypointsManager.Waypoints.Count <= 0 ) return;
 
 		foreach(Waypoint wp in WaypointsManager.Waypoints){
-			if(wp.NextWaypoint){
+			if(wp && wp.NextWaypoint){
 				Vector3 p1 = wp.transform.position;
 				Vector3 p2 = wp.NextWaypoint.transform.position;
 				Handles.DrawDottedLine(p1, p2, 1);

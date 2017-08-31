@@ -17,13 +17,13 @@ public class BuildingShoot : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		m_Collider = GetComponent<SphereCollider>();
-		Assert.IsNotNull(m_Collider);
+		Assert.IsNotNull( m_Collider );
 		m_Collider.radius = m_Range;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if(!m_CurrentTarget)
+		if( !m_CurrentTarget && !m_Shooting )
 			UpdateTarget();
 	}
 
@@ -44,10 +44,11 @@ public class BuildingShoot : MonoBehaviour {
 		m_Shooting = true;
 
 		EnemyHealth health = m_CurrentTarget.GetComponent<EnemyHealth>();
-		Assert.IsNotNull(health);
+		Assert.IsNotNull( health );
 		m_BulletPrefab.Target = health;
 		
-		while(m_CurrentTarget){
+		while( m_CurrentTarget ){
+
 			m_BulletPrefab.Damage = m_Damage;
 			GameObject bullet = Instantiate( m_BulletPrefab.gameObject, transform.position, transform.rotation, transform );
 
