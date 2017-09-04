@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class TowerButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
+public class TowerTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
 
-	bool m_ShowTooltip = false;
+	[SerializeField] GameObject m_Tooltip;
+	[SerializeField] BuildingShoot m_Tower;
 
 	// Use this for initialization
 	void Start () {
@@ -18,10 +19,10 @@ public class TowerButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 	}
 
 	public void OnPointerEnter( PointerEventData eventData ){
-		m_ShowTooltip = true;
+		m_Tooltip.SetActive(true);
 	}
 
 	public void OnPointerExit( PointerEventData eventData ){
-        m_ShowTooltip = false;
+		m_Tooltip.SetActive(false);
     }
 }
