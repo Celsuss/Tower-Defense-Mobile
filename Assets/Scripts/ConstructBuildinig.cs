@@ -62,10 +62,14 @@ public class ConstructBuildinig : MonoBehaviour {
 	}
 
 	void ToggleTowerBlueprintEnabled( GameObject tile ){
-		if( !tile || tile.tag == "Road" )
+		if( !tile || tile.tag == "Road" ){
 			m_TowerBlueprintSprite.enabled = false;
-		else if(tile && !m_TowerBlueprintSprite.enabled)
+			m_DrawTowerRange.LineColor = Color.red;
+		}
+		else if(tile && !m_TowerBlueprintSprite.enabled){
 			m_TowerBlueprintSprite.enabled = true;
+			m_DrawTowerRange.LineColor = Color.green;
+		}
 	}
 
 	void ToggleTowerRangeBlueprintEnabled( GameObject tile ){
@@ -77,8 +81,11 @@ public class ConstructBuildinig : MonoBehaviour {
 
 	public void StartPlaceBuilding( BuildingShoot tower ){
 		m_Tower = tower;
-		m_TowerBlueprintSprite.sprite = m_Tower.GetComponent<SpriteRenderer>().sprite;
 		m_PlacingBuilding = true;
+
+		Sprite sprite = m_Tower.GetComponent<SpriteRenderer>().sprite;
+		Assert.IsNotNull(sprite);
+		m_TowerBlueprintSprite.sprite = sprite;
 
 		m_DrawTowerRange.Radius = tower.Range;
 		m_DrawTowerRange.gameObject.SetActive(true);

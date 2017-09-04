@@ -8,6 +8,13 @@ public class DrawTowerRange : MonoBehaviour {
 	[SerializeField] int m_VertexCount;
 	[SerializeField] float m_Radius;
 	LineRenderer m_LineRenderer;
+	public Color LineColor{
+		get { return LineColor; }
+		set {
+			m_LineRenderer.startColor = value;
+			m_LineRenderer.endColor = value;
+		}
+	}
 
 	public float Radius{
 		get { return m_Radius; }
@@ -25,6 +32,7 @@ public class DrawTowerRange : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		SetupCircle();
+		LineColor = Color.green;
 	}
 	
 	// Update is called once per frame
@@ -45,7 +53,7 @@ public class DrawTowerRange : MonoBehaviour {
 		}
 	}
 
-	void OnDrawGizmos(){
+	/*void OnDrawGizmos(){
 		float deltaTheta = (2f * Mathf.PI) / (m_VertexCount-1);
 		float theta = 0f;
 
@@ -57,5 +65,5 @@ public class DrawTowerRange : MonoBehaviour {
 			oldPos = transform.position + pos;
 			theta += deltaTheta;
 		}
-	}
+	}*/
 }
