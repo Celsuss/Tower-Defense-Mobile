@@ -14,6 +14,10 @@ public class BuildingShoot : MonoBehaviour {
 	List<GameObject> m_EnemiesInRange = new List<GameObject>();
 	[SerializeField] GameObject m_CurrentTarget = null;
 
+	public float Range {
+		get { return m_Range; }
+	}
+
 	// Use this for initialization
 	void Start () {
 		m_Collider = GetComponent<SphereCollider>();
