@@ -51,6 +51,9 @@ public class EnemySpawner : MonoBehaviour {
 
 	IEnumerator SpawnWave( EnemyWaveData enemyData ){
 		for( int i = 0; i < enemyData.Count; ++i ){
+			if(GameManager.Instance.GameOver)
+				break;
+
 			yield return new WaitForSeconds( 1 );
 			Instantiate( enemyData.Prefab, transform.position, Quaternion.identity, transform );
 		}

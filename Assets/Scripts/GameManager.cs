@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour {
 	[SerializeField] int m_Gold;
 	[SerializeField] Text m_LifeText;
 	[SerializeField] Text m_GoldText;
+	[SerializeField] GameObject m_GameOverPanel;
+	bool m_GameOver;
 
 	public static GameManager Instance {
 		get {
@@ -28,11 +30,15 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public int Gold {
-		get{ return m_Gold; }
+		get { return m_Gold; }
 		set {
 			m_Gold = value;
 			m_GoldText.text = m_Gold.ToString();
 		}
+	}
+
+	public bool GameOver {
+		get { return m_GameOver; }
 	}
 
 	void Awake() {
@@ -48,10 +54,22 @@ public class GameManager : MonoBehaviour {
 	void Start () {
 		m_LifeText.text = m_Life.ToString();
 		m_GoldText.text = m_Gold.ToString();
+		m_GameOver = false;
+		m_GameOverPanel.SetActive(false);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if(m_Life <= 0)
+			SetGameOver();
+	}
+
+	void SetGameOver() {
+		m_GameOver = true;
+		m_GameOverPanel.SetActive(true);
+	}
+
+	public void QuitGame(){
+		Application.Quit();
 	}
 }

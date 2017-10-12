@@ -8,14 +8,19 @@ public class BuildingShoot : MonoBehaviour {
 	[SerializeField] float m_Range;
 	[SerializeField] float m_Damage;
 	[SerializeField] float m_FireRate;
-	bool m_Shooting = false;
+	[SerializeField] int m_Cost;
 	[SerializeField] Projectile m_BulletPrefab;
+	bool m_Shooting = false;
 	SphereCollider m_Collider;
 	List<GameObject> m_EnemiesInRange = new List<GameObject>();
-	[SerializeField] GameObject m_CurrentTarget = null;
+	GameObject m_CurrentTarget = null;
 
 	public float Range {
 		get { return m_Range; }
+	}
+
+	public int Cost {
+		get { return m_Cost; }
 	}
 
 	// Use this for initialization
@@ -27,6 +32,8 @@ public class BuildingShoot : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if(GameManager.Instance.GameOver) return;
+
 		if( !m_CurrentTarget && !m_Shooting )
 			UpdateTarget();
 	}

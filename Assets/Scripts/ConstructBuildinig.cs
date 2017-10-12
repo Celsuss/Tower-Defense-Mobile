@@ -30,6 +30,11 @@ public class ConstructBuildinig : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if(GameManager.Instance.GameOver){
+			StopPlacingBuilding();
+			return;
+		}
+
 		GameObject tile = m_BoardManager.GetTileClosestToMouse();
 
 		if( Input.GetMouseButtonDown( 0 ) && m_PlacingBuilding && tile && tile.tag != "Road" )
@@ -43,6 +48,11 @@ public class ConstructBuildinig : MonoBehaviour {
 	}
 
 	void PlaceTowerOnTile(GameObject tile ){
+		if(m_Tower.Cost > GameManager.Instance.Gold){
+			StopPlacingBuilding();
+			return;
+		}
+
 		for( int i = 0; i < tile.transform.childCount; i++ ){
 			if( tile.transform.GetChild( i ).tag == "Building" )
 				return;
@@ -51,8 +61,9 @@ public class ConstructBuildinig : MonoBehaviour {
 		Assert.IsNotNull( m_Tower );
 		Assert.IsNotNull( tile );
 		GameObject newTile = Instantiate( m_Tower.gameObject, tile.transform.position, tile.transform.rotation, tile.transform );
+		GameManager.Instance.Gold -= m_Tower.Cost;
 
-		if( !Input.GetKey( KeyCode.LeftControl ) )
+		if( !Input.GetKey( KeyCode.LeftShift ) )
 			StopPlacingBuilding();
 	}
 
@@ -80,6 +91,8 @@ public class ConstructBuildinig : MonoBehaviour {
 	}
 
 	public void StartPlaceBuilding( BuildingShoot tower ){
+		if(tower.Cost > GameManager.Instance.Gold) return;
+
 		m_Tower = tower;
 		m_PlacingBuilding = true;
 

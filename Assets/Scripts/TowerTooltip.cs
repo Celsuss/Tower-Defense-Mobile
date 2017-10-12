@@ -7,15 +7,16 @@ public class TowerTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
 	[SerializeField] GameObject m_Tooltip;
 	[SerializeField] BuildingShoot m_Tower;
+	Transform m_TooltipAnchor;
 
 	// Use this for initialization
 	void Start () {
-		
+		m_TooltipAnchor = GameObject.Find("Tower Tooltip Anchor").transform;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		m_Tooltip.transform.position = new Vector3(m_TooltipAnchor.position.x, transform.position.y, transform.position.z);;
 	}
 
 	public void OnPointerEnter( PointerEventData eventData ){
