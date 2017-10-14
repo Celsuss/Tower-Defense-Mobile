@@ -27,7 +27,7 @@ public class EnemySpawner : MonoBehaviour {
 		m_CountdownText.enabled = false;
 
 		m_WaveText = GameObject.Find("Wave Text").GetComponent<Text>();
-		m_WaveText.text = 0 + "/" + m_EnemyWaves.Waves[ 0 ].Enemies.Count;
+		m_WaveText.text = 0 + "/" + m_EnemyWaves.Waves.Count;
 	}
 	
 	// Update is called once per frame
@@ -46,7 +46,7 @@ public class EnemySpawner : MonoBehaviour {
 			EnemyWaveData enemyData = wave.Enemies[ i ];
 			StartCoroutine( SpawnEnemiesInWave( enemyData ) );
 		}
-		m_WaveText.text = (m_CurrentWaveIndex+1) + "/" + wave.Enemies.Count;
+		m_WaveText.text = (m_CurrentWaveIndex+1) + "/" + m_EnemyWaves.Waves.Count;
 	}
 
 	IEnumerator SpawnEnemiesInWave( EnemyWaveData enemyData ) {
