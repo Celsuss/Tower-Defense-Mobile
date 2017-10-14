@@ -56,10 +56,11 @@ public class EnemyWavesEditor : Editor {
 			}
 			GUILayout.EndHorizontal();
 
-			GUILayout.Space(5);
-
+			GUILayout.Space(10);
 			for(int i = 0; i < wave.Enemies.Count; ++i)
 				DrawEnemies( i, index );
+
+			GUILayout.Space(10);
 			DrawAddEnemyButton( index );
 
 			GUILayout.Space(20);
@@ -69,29 +70,38 @@ public class EnemyWavesEditor : Editor {
 	void DrawEnemies( int index, int waveIndex ){
 		if( index < 0 || index >= m_Target.Waves[ waveIndex ].Enemies.Count ) return;
 
+		EditorGUI.BeginChangeCheck();
 
 		WaveData wave = m_Target.Waves[waveIndex];
 		EnemyWaveData enemy = wave.Enemies[ index ];
 
+		int count;
+		float spawnRate;
+		GameObject prefab;
 
-
-		GUILayout.Label("Enemie " + index, EditorStyles.label, GUILayout.Width( 90 ) );
-		GUILayout.BeginHorizontal();{   
-            GUILayout.Label( "Count", EditorStyles.label, GUILayout.Width( 40 ) );
-            EditorGUI.BeginChangeCheck();
-
-			int newCount = EditorGUILayout.IntField(enemy.Count, GUILayout.Width( 30 ));
-			GameObject newPrefab = (GameObject)EditorGUILayout.ObjectField(enemy.Prefab, typeof(GameObject), true);
-
-			if( EditorGUI.EndChangeCheck() ){
-				m_Target.Waves[ waveIndex ].Enemies[ index ].Count = newCount;
-				m_Target.Waves[ waveIndex ].Enemies[ index ].Prefab = newPrefab;
-                EditorUtility.SetDirty( m_Target );
-            }
-			DrawRemoveEnemyButton( index, waveIndex );
-
+		GUILayout.BeginHorizontal(); { 
+			prefab = (GameObject)EditorGUILayout.ObjectField(enemy.Prefab, typeof(GameObject), true);
 		}
         GUILayout.EndHorizontal();
+
+		GUILayout.BeginHorizontal(); {
+            GUILayout.Label( "Count", EditorStyles.label, GUILayout.Width( 40 ) );
+			count = EditorGUILayout.IntField(enemy.Count, GUILayout.Width( 30 ));
+
+			GUILayout.Label( "Spawn rate", EditorStyles.label, GUILayout.Width( 70 ) );
+			spawnRate = EditorGUILayout.FloatField(enemy.SpawnRate, GUILayout.Width( 30 ));
+
+			if( EditorGUI.EndChangeCheck() ){
+				m_Target.Waves[ waveIndex ].Enemies[ index ].Count = count;
+				m_Target.Waves[ waveIndex ].Enemies[ index ].Prefab = prefab;
+				m_Target.Waves[ waveIndex ].Enemies[ index ].SpawnRate = spawnRate;
+                EditorUtility.SetDirty( m_Target );
+            }
+
+			DrawRemoveEnemyButton( index, waveIndex );
+		}
+        GUILayout.EndHorizontal();
+		GUILayout.Space(10);
 	}
 
     void DrawAddWaveButton(){
@@ -109,7 +119,7 @@ public class EnemyWavesEditor : Editor {
 	}
 
 	void DrawRemoveWaveButton( int index ){
-		if( GUILayout.Button( "Remove" ) ){
+		if( GUILayout.Button( "Remove Wave" ) ){
                 EditorApplication.Beep();
 				
                 if( EditorUtility.DisplayDialog( "Really?", "Do you really want to remove the Wave '" + index + "'?", "Yes", "No" ) == true ){

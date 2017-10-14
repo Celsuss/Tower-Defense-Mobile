@@ -6,6 +6,7 @@ using UnityEngine;
 public class EnemyWaveData{
     public int Count;
     public GameObject Prefab;
+    public float SpawnRate;
 }
 
 [System.Serializable]

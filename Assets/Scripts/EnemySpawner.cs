@@ -36,7 +36,7 @@ public class EnemySpawner : MonoBehaviour {
 			StartCoroutine(WaveCountdown());
 	}
 
-	void SpawnEnemies( ){
+	void SpawnWave() {
 		if( m_CurrentWaveIndex < 0 || m_CurrentWaveIndex >= m_EnemyWaves.Waves.Count) return;
 
 		WaveData wave = m_EnemyWaves.Waves[ m_CurrentWaveIndex ];
@@ -44,17 +44,17 @@ public class EnemySpawner : MonoBehaviour {
 
 		for(int i = 0; i < wave.Enemies.Count; ++i){
 			EnemyWaveData enemyData = wave.Enemies[ i ];
-			StartCoroutine( SpawnWave( enemyData ) );
+			StartCoroutine( SpawnEnemiesInWave( enemyData ) );
 		}
 		m_WaveText.text = (m_CurrentWaveIndex+1) + "/" + wave.Enemies.Count;
 	}
 
-	IEnumerator SpawnWave( EnemyWaveData enemyData ){
+	IEnumerator SpawnEnemiesInWave( EnemyWaveData enemyData ) {
 		for( int i = 0; i < enemyData.Count; ++i ){
 			if(GameManager.Instance.GameOver)
 				break;
 
-			yield return new WaitForSeconds( 1 );
+			yield return new WaitForSeconds( enemyData.SpawnRate );
 			Instantiate( enemyData.Prefab, transform.position, Quaternion.identity, transform );
 		}
 		m_WaveActive = true;
@@ -75,6 +75,6 @@ public class EnemySpawner : MonoBehaviour {
 
 		++m_CurrentWaveIndex;
 		m_CountdownText.enabled = false;
-		SpawnEnemies();
+		SpawnWave();
 	}
 }
